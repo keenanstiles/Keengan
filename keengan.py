@@ -35,7 +35,7 @@ class Converter:
         self.temp_entry.grid(row=2, padx=10, pady=10)
 
         error = "Please enter a number"
-        self.temp_error = Label(self.temp_frame, text=error,
+        self.temp_error = Label(self.temp_frame, text="",
                                 fg="#9C0000")
         self.temp_error.grid(row=3)
 
@@ -73,21 +73,35 @@ class Converter:
                                         state=DISABLED)
         self.to_history_button.grid(row=1, column=1, padx=5, pady=5)
 
+  #just giving it a little peek to be sure its valid prior to conversion
 
-    def check_temp(min_value):
-        error = ("please enter a number that is more " \
-                 "than {}".format(min_value))
+    def check_temp(self, min_value):
+
+        has_error = "no"
+        error = ("ENTER AN INTEGER GREATER " \
+                 "THAN {}".format(min_value))
 
         try:
-            response = self.temp_entry.get
+            response = self.temp_entry.get()
+            response = float(response)
 
             if response < min_value:
-                print(error)
-            else:
-                return response
+                has_error = "yes"
+
 
         except ValueError:
-            print(error)
+            has_error = "yes"
+
+    #if the numero uno is posin', display an error message
+        if has_error == "yes":
+            self.temp_error.config(text=error, fg="#9C0000")
+        else:
+            self.temp_error.config(text="VALID INPUT", fg="GREEN")
+
+            #if we have at least one valid calculation
+            #fire up history / export button
+            self.to_history_button.config(state=NORMAL)
+
 
     # check temperature is more than -459 before converting it
     def to_celsius(self):
